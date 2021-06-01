@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="src/styles.css" />
+    <title>Weather App</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="weather-app">
+        <form class="search-form" id="search-form">
+          <div class="row">
+            <div class="col-6">
+              <input
+                type="search"
+                placeholder="Type a city.."
+                autofocus="on"
+                autocomplete="off"
+                id="city-input"
+                class="form-control shadow-sm"
+              />
+            </div>
+            <div class="col-3">
+              <input
+                type="submit"
+                value="Search"
+                class="form-control btn btn-primary shadow-sm w-100"
+              />
+            </div>
+            <div class="col-3">
+              <button
+                class="btn btn-success w-100"
+                id="current-location-button"
+              >
+                Current
+              </button>
+            </div>
+          </div>
+        </form>
+        <h1 id="city"></h1>
+        <ul>
+          <li id="date"></li>
+          <li id="description"></li>
+        </ul>
+        <div class="row">
+          <div class="col-6">
+            <div class="clearfix">
+              <div class="float-left">
+                <span class="temperature" id="temperature"></span
+                ><span class="units">°C</span>
+								<img
+                src="data:image/jpeg;base64,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"
+                alt="clear sky"
+                width="200"
+                class="weather-icon float-left"
+                ;
+              />
+							</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <ul>
+              <li>Humidity: <span id="humidity"></span>%</li>
+              <li>Wind: <span id="wind"></span> km/h</li>
+            </ul>
+						<div class="row">
+              <div class="col-2">
+                Mon
+                <ul>
+                  <li>🌤</li>
+                  <li>17<span>&#176;</span>/4<span>&#176;</span></li>
+                </ul>
+              </div>
+              <div class="col-2">
+                Tue
+                <ul>
+                  <li>⛅</li>
+                  <li>14<span>&#176;</span>/5<span>&#176;</span></li>
+                </ul>
+              </div>
+              <div class="col-2">
+                Wed
+                <ul>
+                  <li>☀</li>
+                  <li>15<span>&#176;</span>/4<span>&#176;</span></li>
+                </ul>
+              </div>
+              <div class="col-2">
+                Thu
+                <ul>
+                  <li>🌧</li>
+                  <li>18<span>&#176;</span>/6<span>&#176;</span></li>
+                </ul>
+              </div>
+              <div class="col-2">
+                Fri
+                <ul>
+                  <li>🌞</li>
+                  <li>19<span>&#176;</span>/6<span>&#176;</span></li>
+                </ul>
+              </div>
+						</div>
+					</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="src/index.js"></script>
+  </body>
+</html>
